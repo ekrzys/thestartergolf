@@ -99,58 +99,59 @@
 <script>
 const CATEGORIES = [
   { id: 'pga', label: 'PGA Tour', feeds: [
-    { name: 'Golf.com', url: 'https://golf.com//news/feed', limit: 4 },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/golf-news/rss', limit: 4 },
-    { name: 'ESPN Golf', url: 'https://www.espn.com/espn/rss/golf/news', limit: 4 },
-    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed', limit: 4 },
-]},
+    { name: 'Golf.com', url: 'https://golf.com/news/feed', limit: 8 },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/golf-news/rss', limit: 8 },
+    { name: 'ESPN Golf', url: 'https://www.espn.com/espn/rss/golf/news', limit: 8 },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed', limit: 8 },
+  ]},
   { id: 'dp', label: 'DP World Tour', feeds: [
-    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed', limit: 8 },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed', limit: 8 },
   ]},
   { id: 'liv', label: 'LIV Golf', feeds: [
-    { name: 'Golf.com', url: 'https://golf.com/feed' },
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
-    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/feed' },
+    { name: 'Golf.com', url: 'https://golf.com/news/feed', limit: 8 },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
+    { name: 'No Laying Up', url: 'https://nolayingup.com/feed', limit: 8 },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/feed', limit: 8 },
   ]},
   { id: 'majors', label: 'Majors', feeds: [
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
-    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
+    { name: 'No Laying Up', url: 'https://nolayingup.com/feed', limit: 8 },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed', limit: 8 },
   ]},
   { id: 'amateur', label: 'Amateur', feeds: [
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
-    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed', limit: 8 },
   ]},
   { id: 'juniors', label: 'Juniors', feeds: [
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
   ]},
   { id: 'instruction', label: 'Instruction', feeds: [
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
-    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
-    { name: 'Golf.com', url: 'https://golf.com/feed' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed', limit: 8 },
+    { name: 'Golf.com', url: 'https://golf.com/news/feed', limit: 8 },
   ]},
   { id: 'equipment', label: 'Equipment', feeds: [
-    { name: 'My Golf Spy', url: 'https://mygolfspy.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
-    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'My Golf Spy', url: 'https://mygolfspy.com/feed/', limit: 8 },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/', limit: 8 },
   ]},
   { id: 'architecture', label: 'Architecture', feeds: [
-    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/architecture/feed' },
-    { name: 'Geoff Shackelford', url: 'https://geoffshackelford.com/homepage/rss.xml' },
-    { name: 'Golf Club Atlas', url: 'https://www.golfclubatlas.com/rss/' },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/architecture/feed', limit: 8 },
+    { name: 'Geoff Shackelford', url: 'https://geoffshackelford.com/homepage/rss.xml', limit: 8 },
+    { name: 'Golf Club Atlas', url: 'https://www.golfclubatlas.com/rss/', limit: 8 },
   ]},
   { id: 'travel', label: 'Travel', feeds: [
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
-    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
-    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml', limit: 8 },
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed', limit: 8 },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed', limit: 8 },
   ]},
 ];
+
 const PROXY = '/api/feed?url=';
 let activeCategory = 'pga';
 const commentStore = {};
@@ -218,10 +219,6 @@ async function loadCategory(id) {
   if (!anySuccess) html = buildFallback(cat);
   container.innerHTML = html;
 }
-
-const seenTitles = new Set();
-
-function resetDupes() { seenTitles.clear(); }
 
 async function fetchFeed(feed) {
   const url = PROXY + encodeURIComponent(feed.url);
