@@ -187,18 +187,25 @@ function switchCategory(id) {
 }
 
 async function loadCategory(id) {
- resetDupes(); 
   const cat = CATEGORIES.find(c => c.id === id);
   const container = document.getElementById('headlines-container');
   container.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Fetching latest ' + cat.label + ' headlines…</div>';
   const results = await Promise.allSettled(cat.feeds.map(f => fetchFeed(f)));
+  const seenTitles = new Set();
   let html = '', anySuccess = false;
   results.forEach((result, i) => {
     const feed = cat.feeds[i];
     if (result.status === 'fulfilled' && result.value.length > 0) {
+      const uniqueItems = result.value.filter(item => {
+        const key = item.title.trim().toLowerCase().slice(0, 60);
+        if (!key || seenTitles.has(key)) return false;
+        seenTitles.add(key);
+        return true;
+      });
+      if (uniqueItems.length === 0) return;
       anySuccess = true;
       html += `<div class="source-block"><div class="source-name">${feed.name}</div>`;
-      result.value.forEach(item => {
+      uniqueItems.forEach(item => {
         const dateStr = item.pubDate ? formatDate(item.pubDate) : '';
         html += `<a class="headline-item" href="${escHtml(item.link)}" target="_blank" rel="noopener">
           <div class="headline-text">${escHtml(item.title)}</div>
@@ -223,21 +230,13 @@ async function fetchFeed(feed) {
   const parser = new DOMParser();
   const xml = parser.parseFromString(text, 'application/xml');
   const limit = feed.limit || 8;
-  const allItems = Array.from(xml.querySelectorAll('item'));
-  const unique = [];
-  for (const item of allItems) {
-    if (unique.length >= limit) break;
-    const title = (item.querySelector('title')?.textContent || '').trim().toLowerCase().slice(0, 60);
-    if (!title || seenTitles.has(title)) continue;
-    seenTitles.add(title);
-    unique.push({
-      title: item.querySelector('title')?.textContent || '',
-      link: item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '',
-      pubDate: item.querySelector('pubDate')?.textContent || '',
-    });
-  }
-  if (!unique.length) throw new Error('No items');
-  return unique;
+  const items = Array.from(xml.querySelectorAll('item')).slice(0, limit);
+  if (!items.length) throw new Error('No items');
+  return items.map(item => ({
+    title: item.querySelector('title')?.textContent || '',
+    link: item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '',
+    pubDate: item.querySelector('pubDate')?.textContent || '',
+  }));
 }
 
 function buildFallback(cat) {
