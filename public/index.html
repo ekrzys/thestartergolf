@@ -214,6 +214,11 @@ async function loadCategory(id) {
         </a>`;
       });
       html += '</div>';
+    } else {
+      html += `<div class="source-block"><div class="source-name">${feed.name}</div>
+        <div class="error-msg" style="font-size:12px; padding:8px 0;">
+          ✗ Failed: ${result.reason?.message || 'no items returned'}
+        </div></div>`;
     }
   });
   if (!anySuccess) html = buildFallback(cat);
