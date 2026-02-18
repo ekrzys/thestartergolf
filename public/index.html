@@ -229,9 +229,59 @@ async function fetchFeed(feed) {
 }
 
 function buildFallback(cat) {
-  const fallbacks = {
-    pga: [{ title: 'PGA Tour official news', link: 'https://www.pgatour.com/news', source: 'PGA Tour' },{ title: 'Golf Channel – PGA Tour', link: 'https://www.golfchannel.com/pga-tour', source: 'Golf Channel' }],
-    dp: [{ title: 'DP World Tour official new
+  return '<div class="empty-msg">No headlines available right now. Try refreshing.</div>';
+}
+
+function renderComments(id) {
+  const list = document.getElementById('comments-list');
+  const count = document.getElementById('comment-count');
+  const comments = commentStore[id] || [];
+  count.textContent = comments.length;
+  if (!comments.length) { list.innerHTML = '<div class="no-comments">Be the first to comment on this category.</div>'; return; }
+  list.innerHTML = comments.slice().reverse().map(c => `
+    <div class="comment-entry">
+      <div class="comment-meta">
+        <span class="comment-author">${escHtml(c.name)}</span>
+        <span class="comment-time">${c.time}</span>
+        <span class="comment-tag">${escHtml(c.tag)}</span>
+      </div>
+      <div class="comment-body">${escHtml(c.body)}</div>
+    </div>`).join('');
+}
+
+function postComment() {
+  const nameEl = document.getElementById('commenter-name');
+  const bodyEl = document.getElementById('commenter-body');
+  const name = nameEl.value.trim(), body = bodyEl.value.trim();
+  if (!name || !body) { alert('Please enter your name and a comment.'); return; }
+  const cat = CATEGORIES.find(c => c.id === activeCategory);
+  commentStore[activeCategory].push({ name, body, time: 'Just now', tag: cat.label });
+  nameEl.value = ''; bodyEl.value = '';
+  renderComments(activeCategory);
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(str) {
+  try {
+    const d = new Date(str), now = new Date();
+    const diff = Math.floor((now - d) / 60000);
+    if (diff < 1) return 'Just now';
+    if (diff < 60) return diff + 'm ago';
+    if (diff < 1440) return Math.floor(diff/60) + 'h ago';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  } catch(e) { return ''; }
+}
+
+function setDate() {
+  document.getElementById('masthead-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+setDate(); buildNav(); loadCategory('pga'); renderComments('pga');
 </script>
 </body>
 </html>
