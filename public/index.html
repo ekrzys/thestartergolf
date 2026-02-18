@@ -99,10 +99,10 @@
 <script>
 const CATEGORIES = [
   { id: 'pga', label: 'PGA Tour', feeds: [
-    { name: 'Golf.com', url: 'https://golf.com/feed', limit: 5 },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/golf-news/rss', limit: 5 },
-    { name: 'ESPN Golf', url: 'https://www.espn.com/espn/rss/golf/news', limit: 5 },
-    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed', limit: 5 },
+    { name: 'Golf.com', url: 'https://golf.com//news/feed', limit: 4 },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/golf-news/rss', limit: 4 },
+    { name: 'ESPN Golf', url: 'https://www.espn.com/espn/rss/golf/news', limit: 4 },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed', limit: 4 },
 ]},
   { id: 'dp', label: 'DP World Tour', feeds: [
     { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
@@ -187,6 +187,7 @@ function switchCategory(id) {
 }
 
 async function loadCategory(id) {
+ resetDupes(); 
   const cat = CATEGORIES.find(c => c.id === id);
   const container = document.getElementById('headlines-container');
   container.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Fetching latest ' + cat.label + ' headlines…</div>';
@@ -211,20 +212,32 @@ async function loadCategory(id) {
   container.innerHTML = html;
 }
 
+const seenTitles = new Set();
+
+function resetDupes() { seenTitles.clear(); }
+
 async function fetchFeed(feed) {
   const url = PROXY + encodeURIComponent(feed.url);
   const resp = await fetch(url);
   const text = await resp.text();
   const parser = new DOMParser();
   const xml = parser.parseFromString(text, 'application/xml');
-  const limit = feed.limit || 5;
-  const items = Array.from(xml.querySelectorAll('item')).slice(0, limit);
-  if (!items.length) throw new Error('No items');
-  return items.map(item => ({
-    title: item.querySelector('title')?.textContent || '',
-    link: item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '',
-    pubDate: item.querySelector('pubDate')?.textContent || '',
-  }));
+  const limit = feed.limit || 8;
+  const allItems = Array.from(xml.querySelectorAll('item'));
+  const unique = [];
+  for (const item of allItems) {
+    if (unique.length >= limit) break;
+    const title = (item.querySelector('title')?.textContent || '').trim().toLowerCase().slice(0, 60);
+    if (!title || seenTitles.has(title)) continue;
+    seenTitles.add(title);
+    unique.push({
+      title: item.querySelector('title')?.textContent || '',
+      link: item.querySelector('link')?.textContent || item.querySelector('guid')?.textContent || '',
+      pubDate: item.querySelector('pubDate')?.textContent || '',
+    });
+  }
+  if (!unique.length) throw new Error('No items');
+  return unique;
 }
 
 function buildFallback(cat) {
