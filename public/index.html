@@ -99,53 +99,59 @@
 <script>
 const CATEGORIES = [
   { id: 'pga', label: 'PGA Tour', feeds: [
-    { name: 'Golf Channel', url: 'https://www.golfchannel.com/rss/feed.json' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
+    { name: 'Golf.com', url: 'https://golf.com/feed' },
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
     { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed' },
+    { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
   ]},
   { id: 'dp', label: 'DP World Tour', feeds: [
     { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
   ]},
   { id: 'liv', label: 'LIV Golf', feeds: [
+    { name: 'Golf.com', url: 'https://golf.com/feed' },
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/feed' },
     { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/feed' },
   ]},
   { id: 'majors', label: 'Majors', feeds: [
-    { name: 'Golf Channel', url: 'https://www.golfchannel.com/rss/feed.json' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
     { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
   ]},
   { id: 'amateur', label: 'Amateur', feeds: [
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
   ]},
   { id: 'juniors', label: 'Juniors', feeds: [
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
   ]},
   { id: 'instruction', label: 'Instruction', feeds: [
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/instruction' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
     { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
+    { name: 'Golf.com', url: 'https://golf.com/feed' },
   ]},
   { id: 'equipment', label: 'Equipment', feeds: [
     { name: 'My Golf Spy', url: 'https://mygolfspy.com/feed/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/equipment' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
     { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
   ]},
   { id: 'architecture', label: 'Architecture', feeds: [
     { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/architecture/feed' },
+    { name: 'Geoff Shackelford', url: 'https://geoffshackelford.com/homepage/rss.xml' },
     { name: 'Golf Club Atlas', url: 'https://www.golfclubatlas.com/rss/' },
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/courses' },
   ]},
   { id: 'travel', label: 'Travel', feeds: [
-    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/travel' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/services/rss/feeds/gd_everything.xml' },
     { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
+    { name: 'Global Golf Post', url: 'https://globalgolfpost.com/feed' },
   ]},
 ];
-
 const PROXY = '/api/feed?url=';
 let activeCategory = 'pga';
 const commentStore = {};
