@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE STARTER GOLF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green-deep: #1a3a2a; --green-mid: #2d5a3d; --green-light: #4a8c5c;
+    --gold: #c9a84c; --gold-light: #e8c87a; --cream: #f5f0e8;
+    --cream-dark: #ede6d6; --text-dark: #1a1a1a; --text-mid: #3a3a3a;
+    --text-light: #6a6a6a; --rule: #c5b99a; --white: #ffffff;
+  }
+  body { background: var(--cream); color: var(--text-dark); font-family: 'Source Serif 4', Georgia, serif; min-height: 100vh; }
+  .masthead { background: var(--green-deep); text-align: center; padding: 28px 20px 20px; border-bottom: 4px solid var(--gold); position: relative; }
+  .masthead::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px); pointer-events: none; }
+  .masthead-date { font-family: 'Source Serif 4', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-light); opacity: 0.7; margin-bottom: 8px; }
+  .masthead-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 10vw, 96px); letter-spacing: 8px; color: var(--white); line-height: 1; text-shadow: 0 2px 20px rgba(0,0,0,0.4); }
+  .masthead-title span { color: var(--gold); }
+  .masthead-tagline { font-family: 'Source Serif 4', serif; font-style: italic; font-size: 13px; color: var(--gold-light); opacity: 0.65; margin-top: 6px; letter-spacing: 1px; }
+  .nav-bar { background: var(--green-mid); position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--gold); box-shadow: 0 3px 12px rgba(0,0,0,0.25); }
+  .nav-inner { display: flex; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; max-width: 1400px; margin: 0 auto; }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-tab { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 2px; color: rgba(255,255,255,0.65); padding: 14px 22px; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; transition: color 0.2s, border-color 0.2s, background 0.2s; user-select: none; }
+  .nav-tab:hover { color: var(--gold-light); background: rgba(255,255,255,0.05); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(255,255,255,0.07); }
+  .page-body { max-width: 1400px; margin: 0 auto; padding: 30px 20px; display: grid; grid-template-columns: 1fr 380px; gap: 32px; }
+  @media (max-width: 900px) { .page-body { grid-template-columns: 1fr; } }
+  .panel-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 4px; color: var(--green-mid); border-bottom: 2px solid var(--green-mid); padding-bottom: 6px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+  .panel-label .refresh-btn { font-size: 11px; letter-spacing: 2px; color: var(--text-light); cursor: pointer; padding: 3px 10px; border: 1px solid var(--rule); background: none; font-family: 'Bebas Neue', sans-serif; transition: all 0.2s; }
+  .panel-label .refresh-btn:hover { background: var(--green-deep); color: var(--gold); border-color: var(--green-deep); }
+  .source-block { margin-bottom: 28px; }
+  .source-name { font-family: 'Source Serif 4', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--green-light); font-weight: 600; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid var(--green-light); }
+  .headline-item { display: block; padding: 9px 0 9px 14px; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--text-dark); position: relative; transition: background 0.15s, color 0.15s, padding 0.15s; }
+  .headline-item::before { content: '▸'; position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 9px; color: var(--gold); opacity: 0; transition: opacity 0.15s; }
+  .headline-item:hover::before { opacity: 1; }
+  .headline-item:hover { background: rgba(201,168,76,0.07); color: var(--green-deep); padding-left: 20px; }
+  .headline-text { font-family: 'Source Serif 4', serif; font-size: 15.5px; line-height: 1.45; font-weight: 400; }
+  .headline-meta { font-size: 10.5px; color: var(--text-light); margin-top: 3px; font-style: italic; }
+  .loading-msg, .error-msg, .empty-msg { font-style: italic; color: var(--text-light); padding: 20px 0; font-size: 14px; }
+  .error-msg { color: #8a3a3a; }
+  .comments-panel { align-self: start; position: sticky; top: 70px; }
+  .comments-box { background: var(--white); border: 1px solid var(--rule); border-top: 4px solid var(--green-deep); }
+  .comments-header { background: var(--green-deep); padding: 14px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--gold); display: flex; align-items: center; gap: 10px; }
+  .comments-header .count-badge { background: var(--gold); color: var(--green-deep); font-size: 12px; padding: 2px 8px; border-radius: 20px; }
+  .comment-form { padding: 16px 18px; border-bottom: 1px solid var(--cream-dark); background: var(--cream); }
+  .comment-form input, .comment-form textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--rule); background: var(--white); font-family: 'Source Serif 4', serif; font-size: 13.5px; color: var(--text-dark); margin-bottom: 8px; outline: none; transition: border-color 0.2s; }
+  .comment-form input:focus, .comment-form textarea:focus { border-color: var(--green-mid); }
+  .comment-form textarea { resize: vertical; min-height: 80px; }
+  .comment-form button { background: var(--green-deep); color: var(--gold); border: none; padding: 10px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; cursor: pointer; transition: background 0.2s; width: 100%; }
+  .comment-form button:hover { background: var(--green-mid); }
+  .comments-list { padding: 0; max-height: 560px; overflow-y: auto; }
+  .comment-entry { padding: 14px 18px; border-bottom: 1px solid var(--cream-dark); animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .comment-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .comment-author { font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--green-deep); font-family: 'Source Serif 4', serif; }
+  .comment-time { font-size: 11px; color: var(--text-light); font-style: italic; }
+  .comment-body { font-size: 13.5px; line-height: 1.5; color: var(--text-mid); }
+  .comment-tag { display: inline-block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: var(--cream-dark); color: var(--green-mid); padding: 2px 7px; border-radius: 2px; font-family: 'Source Serif 4', serif; font-weight: 600; }
+  .context-strip { background: var(--green-deep); color: var(--gold-light); font-family: 'Source Serif 4', serif; font-style: italic; font-size: 12px; padding: 8px 18px; opacity: 0.8; }
+  .no-comments { padding: 20px 18px; font-style: italic; color: var(--text-light); font-size: 13px; }
+  footer { background: var(--green-deep); border-top: 3px solid var(--gold); text-align: center; padding: 20px; margin-top: 40px; font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 2px; font-family: 'Source Serif 4', serif; text-transform: uppercase; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--rule); border-top-color: var(--green-mid); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-date" id="masthead-date"></div>
+  <div class="masthead-title">THE STARTER<span>GOLF</span></div>
+  <div class="masthead-tagline">Check in. Tee off. Your daily golf briefing.</div>
+</header>
+<nav class="nav-bar"><div class="nav-inner" id="nav-inner"></div></nav>
+<div class="page-body">
+  <main class="headlines-panel">
+    <div class="panel-label">
+      <span id="panel-category-label">Headlines</span>
+      <button class="refresh-btn" onclick="loadCategory(activeCategory)">↺ Refresh</button>
+    </div>
+    <div id="headlines-container"><div class="loading-msg"><span class="spinner"></span> Loading headlines…</div></div>
+  </main>
+  <aside class="comments-panel">
+    <div class="comments-box">
+      <div class="comments-header">Reader Comments <span class="count-badge" id="comment-count">0</span></div>
+      <div class="context-strip">Commenting on: <span id="comment-cat">All Golf</span></div>
+      <div class="comment-form">
+        <input type="text" id="commenter-name" placeholder="Your name (e.g. FairwayFred)" maxlength="40">
+        <textarea id="commenter-body" placeholder="Share your take on today's golf news…" maxlength="500"></textarea>
+        <button onclick="postComment()">Post Comment</button>
+      </div>
+      <div class="comments-list" id="comments-list"><div class="no-comments">Be the first to comment.</div></div>
+    </div>
+  </aside>
+</div>
+<footer>© The Starter Golf — Your daily golf briefing — Not affiliated with any tour or publisher</footer>
+<script>
+const CATEGORIES = [
+  { id: 'pga', label: 'PGA Tour', feeds: [
+    { name: 'Golf Channel', url: 'https://www.golfchannel.com/rss/feed.json' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/competitive-golf/feed' },
+  ]},
+  { id: 'dp', label: 'DP World Tour', feeds: [
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+  ]},
+  { id: 'liv', label: 'LIV Golf', feeds: [
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/feed' },
+    { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
+  ]},
+  { id: 'majors', label: 'Majors', feeds: [
+    { name: 'Golf Channel', url: 'https://www.golfchannel.com/rss/feed.json' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'No Laying Up', url: 'https://nolayingup.com/feed' },
+  ]},
+  { id: 'amateur', label: 'Amateur', feeds: [
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+  ]},
+  { id: 'juniors', label: 'Juniors', feeds: [
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/all' },
+  ]},
+  { id: 'instruction', label: 'Instruction', feeds: [
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/instruction' },
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
+  ]},
+  { id: 'equipment', label: 'Equipment', feeds: [
+    { name: 'My Golf Spy', url: 'https://mygolfspy.com/feed/' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/equipment' },
+    { name: 'Golf Week', url: 'https://golfweek.usatoday.com/feed/' },
+  ]},
+  { id: 'architecture', label: 'Architecture', feeds: [
+    { name: 'Fried Egg Golf', url: 'https://thefriedegg.com/category/architecture/feed' },
+    { name: 'Golf Club Atlas', url: 'https://www.golfclubatlas.com/rss/' },
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/courses' },
+  ]},
+  { id: 'travel', label: 'Travel', feeds: [
+    { name: 'Golf Digest', url: 'https://www.golfdigest.com/rss/travel' },
+    { name: 'Golf Monthly', url: 'https://www.golfmonthly.com/feed' },
+  ]},
+];
+
+const PROXY = '/api/feed?url=';
+let activeCategory = 'pga';
+const commentStore = {};
+CATEGORIES.forEach(c => commentStore[c.id] = []);
+commentStore['pga'].push(
+  { name: 'FairwayFred', body: 'Finally a clean place for all golf news. Bookmarking this.', time: 'Just now', tag: 'PGA Tour' },
+  { name: 'BirdieMachina', body: 'Anyone else think the schedule is getting too crowded?', time: '2 min ago', tag: 'PGA Tour' }
+);
+commentStore['architecture'].push(
+  { name: 'GrassNerd', body: 'Fried Egg is the best thing to happen to architecture coverage in years.', time: '5 min ago', tag: 'Architecture' }
+);
+
+function buildNav() {
+  const nav = document.getElementById('nav-inner');
+  CATEGORIES.forEach(cat => {
+    const tab = document.createElement('div');
+    tab.className = 'nav-tab' + (cat.id === activeCategory ? ' active' : '');
+    tab.textContent = cat.label;
+    tab.onclick = () => switchCategory(cat.id);
+    tab.id = 'tab-' + cat.id;
+    nav.appendChild(tab);
+  });
+}
+
+function switchCategory(id) {
+  activeCategory = id;
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  const cat = CATEGORIES.find(c => c.id === id);
+  document.getElementById('panel-category-label').textContent = cat.label + ' Headlines';
+  document.getElementById('comment-cat').textContent = cat.label;
+  renderComments(id);
+  loadCategory(id);
+}
+
+async function loadCategory(id) {
+  const cat = CATEGORIES.find(c => c.id === id);
+  const container = document.getElementById('headlines-container');
+  container.innerHTML = '<div class="loading-msg"><span class="spinner"></span> Fetching latest ' + cat.label + ' headlines…</div>';
+  const results = await Promise.allSettled(cat.feeds.map(f => fetchFeed(f)));
+  let html = '', anySuccess = false;
+  results.forEach((result, i) => {
+    const feed = cat.feeds[i];
+    if (result.status === 'fulfilled' && result.value.length > 0) {
+      anySuccess = true;
+      html += `<div class="source-block"><div class="source-name">${feed.name}</div>`;
+      result.value.forEach(item => {
+        const dateStr = item.pubDate ? formatDate(item.pubDate) : '';
+        html += `<a class="headline-item" href="${escHtml(item.link)}" target="_blank" rel="noopener">
+          <div class="headline-text">${escHtml(item.title)}</div>
+          ${dateStr ? `<div class="headline-meta">${dateStr}</div>` : ''}
+        </a>`;
+      });
+      html += '</div>';
+    }
+  });
+  if (!anySuccess) html = buildFallback(cat);
+  container.innerHTML = html;
+}
+
+async function fetchFeed(feed) {
+  const url = PROXY + encodeURIComponent(feed.url);
+  const resp = await fetch(url);
+  const text = await resp.text();
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(text, 'application/xml');
+  const items = Array.from(xml.querySelectorAll('item')).slice(0, 10);
+  if (!items.length) throw new Error('No items');
+  return items.map(item => ({
+    title: item.querySelector('title')?.textContent || '',
+    link: item.querySelector('link')?.textContent || '',
+    pubDate: item.querySelector('pubDate')?.textContent || '',
+  }));
+}
+
+function buildFallback(cat) {
+  const fallbacks = {
+    pga: [{ title: 'PGA Tour official news', link: 'https://www.pgatour.com/news', source: 'PGA Tour' },{ title: 'Golf Channel – PGA Tour', link: 'https://www.golfchannel.com/pga-tour', source: 'Golf Channel' }],
+    dp: [{ title: 'DP World Tour official news', link: 'https://www.dpworldtour.com/news', source: 'DP World Tour' }],
+    liv: [{ title: 'LIV Golf official news', link: 'https://www.livgolf.com/news', source: 'LIV Golf' }],
+    majors: [{ title: 'The Masters', link: 'https://www.masters.com', source: 'Masters' },{ title: 'The Open Championship', link: 'https://www.theopen.com', source: 'The Open' },{ title: 'US Open', link: 'https://www.usopen.com', source: 'US Open' },{ title: 'PGA Championship', link: 'https://www.pgachampionship.com', source: 'PGA Championship' }],
+    amateur: [{ title: 'USGA Championships', link: 'https://www.usga.org/championships.html', source: 'USGA' }],
+    juniors: [{ title: 'AJGA News', link: 'https://www.ajga.org/news', source: 'AJGA' }],
+    instruction: [{ title: 'Golf Digest Instruction', link: 'https://www.golfdigest.com/instruction', source: 'Golf Digest' }],
+    equipment: [{ title: 'My Golf Spy Reviews', link: 'https://mygolfspy.com', source: 'My Golf Spy' }],
+    architecture: [{ title: 'Fried Egg Golf Architecture', link: 'https://thefriedegg.com/category/architecture', source: 'Fried Egg Golf' },{ title: 'Golf Club Atlas', link: 'https://www.golfclubatlas.com', source: 'Golf Club Atlas' }],
+    travel: [{ title: 'Golf Digest Travel', link: 'https://www.golfdigest.com/courses-travel', source: 'Golf Digest' }],
+  };
+  const items = fallbacks[cat.id] || [];
+  if (!items.length) return '<div class="empty-msg">No headlines available right now.</div>';
+  const bySource = {};
+  items.forEach(it => { if (!bySource[it.source]) bySource[it.source] = []; bySource[it.source].push(it); });
+  let html = `<div class="error-msg" style="margin-bottom:16px;font-size:13px;">Live feeds loading — showing curated source links.</div>`;
+  Object.entries(bySource).forEach(([src, its]) => {
+    html += `<div class="source-block"><div class="source-name">${src}</div>`;
+    its.forEach(it => { html += `<a class="headline-item" href="${it.link}" target="_blank" rel="noopener"><div class="headline-text">${escHtml(it.title)}</div></a>`; });
+    html += '</div>';
+  });
+  return html;
+}
+
+function renderComments(id) {
+  const list = document.getElementById('comments-list');
+  const count = document.getElementById('comment-count');
+  const comments = commentStore[id] || [];
+  count.textContent = comments.length;
+  if (!comments.length) { list.innerHTML = '<div class="no-comments">Be the first to comment on this category.</div>'; return; }
+  list.innerHTML = comments.slice().reverse().map(c => `
+    <div class="comment-entry">
+      <div class="comment-meta">
+        <span class="comment-author">${escHtml(c.name)}</span>
+        <span class="comment-time">${c.time}</span>
+        <span class="comment-tag">${escHtml(c.tag)}</span>
+      </div>
+      <div class="comment-body">${escHtml(c.body)}</div>
+    </div>`).join('');
+}
+
+function postComment() {
+  const nameEl = document.getElementById('commenter-name');
+  const bodyEl = document.getElementById('commenter-body');
+  const name = nameEl.value.trim(), body = bodyEl.value.trim();
+  if (!name || !body) { alert('Please enter your name and a comment.'); return; }
+  const cat = CATEGORIES.find(c => c.id === activeCategory);
+  commentStore[activeCategory].push({ name, body, time: 'Just now', tag: cat.label });
+  nameEl.value = ''; bodyEl.value = '';
+  renderComments(activeCategory);
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(str) {
+  try {
+    const d = new Date(str), now = new Date();
+    const diff = Math.floor((now - d) / 60000);
+    if (diff < 1) return 'Just now';
+    if (diff < 60) return diff + 'm ago';
+    if (diff < 1440) return Math.floor(diff/60) + 'h ago';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  } catch(e) { return ''; }
+}
+
+function setDate() {
+  document.getElementById('masthead-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+}
+
+setDate(); buildNav(); loadCategory('pga'); renderComments('pga');
+</script>
+</body>
+</html>
