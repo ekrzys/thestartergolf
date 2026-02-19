@@ -1,3 +1,4 @@
+export const config = { runtime: 'nodejs' };
 export default async function handler(req, res) {
   const category = req.query?.category || new URL(req.url, 'http://x').searchParams.get('category');
   if (!category) return res.status(400).json({ error: 'No category provided' });
