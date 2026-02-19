@@ -1,4 +1,5 @@
 // v2
+export const config = { runtime: 'nodejs18.x' };
 export default async function handler(req, res) {
   const urlObj = new URL(req.url, 'https://thestartergolf.vercel.app');
 const url = urlObj.searchParams.get('url');
