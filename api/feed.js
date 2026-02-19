@@ -1,3 +1,4 @@
+// v2
 export default async function handler(req, res) {
   const { url, category } = req.query;
 
