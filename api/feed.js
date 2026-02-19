@@ -1,6 +1,8 @@
 // v2
 export default async function handler(req, res) {
-  const { url, category } = req.query;
+  const urlObj = new URL(req.url, 'https://thestartergolf.vercel.app');
+const url = urlObj.searchParams.get('url');
+const category = urlObj.searchParams.get('category');
 
   if (category) {
     const SUPABASE_URL = process.env.SUPABASE_URL;
