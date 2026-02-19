@@ -1,10 +1,13 @@
-// v2
-export const config = { runtime: 'nodejs18.x' };
 export default async function handler(req, res) {
-  const urlObj = new URL(req.url, 'https://thestartergolf.vercel.app');
-const url = urlObj.searchParams.get('url');
-const category = urlObj.searchParams.get('category');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  const rawUrl = req.url || '';
+  const queryString = rawUrl.includes('?') ? rawUrl.split('?')[1] : '';
+  const params = new URLSearchParams(queryString);
+  const url = params.get('url');
+  const category = params.get('category');
 
+  // Headlines route - read from Supabase
   if (category) {
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
@@ -19,13 +22,13 @@ const category = urlObj.searchParams.get('category');
         }
       );
       const data = await resp.json();
-      res.setHeader('Access-Control-Allow-Origin', '*');
       return res.status(200).json(data);
     } catch(err) {
       return res.status(500).json({ error: err.message });
     }
   }
 
+  // Feed proxy route - fetch RSS
   if (!url) return res.status(400).json({ error: 'No URL or category provided' });
   try {
     const response = await fetch(url, {
@@ -36,7 +39,6 @@ const category = urlObj.searchParams.get('category');
       }
     });
     const text = await response.text();
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/xml');
     return res.status(200).send(text);
   } catch (err) {
